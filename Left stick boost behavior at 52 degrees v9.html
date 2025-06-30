@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boost Energy Behavior at a 52° Camera Angle for an Aerial Dive</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+			align-items: flex-start;
+			background-color: b;
+			zoom: 1 !important;
+			transform: scale(1) !important;
+        }
+				
+		* {
+			zoom: 1 !important;
+		}
+        #mainWrapper {
+            display: flex;
+            align-items: flex-start;
+            gap: 0px; /* px space between the graphics */
+			transform-origin: top center;
+        }
+        
+        .container {
+            position: relative;
+            width: 1032px;
+            height: 1032px;
+        }
+		
+		.legendContainer {
+			position: relative;
+			width: 391px; /* Ajuste selon la largeur réelle de ton image: à modifier aussi dans const totalWidth */
+			height: 1032px;
+		}
+
+		.legendImage {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background-image: url('https://i.imgur.com/syECPgZ.png');
+			background-size: cover;
+			background-position: center;
+			opacity: 0;
+			transition: opacity 0.5s ease-in-out;
+			z-index: 3;
+		}
+        
+		.titleDisplay {
+			position: absolute;
+			bottom: -80px; /* Position below the container */
+			left: 50%;
+			transform: translateX(-50%); /* Center horizontally */
+			color: white;
+    		font-family: Neris, sans-serif;
+    		font-size: 44px;
+			font-weight: 600;
+			background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(20, 20, 20, 0.9));
+			padding: 12px 16px;
+			border-radius: 16px;
+			border: 1px solid rgba(255, 255, 255, 0.2);
+			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5), 0 2px 4px rgba(0, 0, 0, 0.3);
+			backdrop-filter: blur(8px);
+			text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+			line-height: 1.2;
+			text-align: center;
+			white-space: nowrap;
+			z-index: 5;
+		}
+		
+		.legendTitle {
+			position: absolute;
+			bottom: -80px;
+			left: 50%;
+			transform: translateX(-50%);
+			color: white;
+			font-family: Neris, sans-serif;
+			font-size: 26px;
+			font-weight: 600;
+			background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(20, 20, 20, 0.9));
+			padding: 12px 16px;
+			border-radius: 16px;
+			border: 1px solid rgba(255, 255, 255, 0.2);
+			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5), 0 2px 4px rgba(0, 0, 0, 0.3);
+			backdrop-filter: blur(8px);
+			text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+			line-height: 1.2;
+			text-align: center;
+			white-space: pre-line;
+			width: max-content;
+			opacity: 0;
+			transition: opacity 0.5s ease-in-out;
+			z-index: 5;
+		}
+		
+        /* Background image layers */
+        .background1, .background2, .diveStartBackground {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            transition: opacity 0.2s ease-in-out; /* transition duration for the slow vs flap pressure images*/
+        }
+        
+        .background1 {
+            background-image: url('https://i.imgur.com/ai3Icf9.png');
+            opacity: 1;
+            z-index: 1;
+        }
+        
+        .background2 {
+            background-image: url('https://i.imgur.com/G9GxMgf.png');
+            opacity: 0;
+            z-index: 2; /* Higher z-index so slow pressure bg appears on top when fading in or out*/
+        }
+        
+        .diveStartBackground {
+            background-image: url('https://i.imgur.com/2jDGrQv.png');
+            opacity: 1;
+            z-index: 3;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            transition: opacity 0.5s ease-in-out; /* transition duration for the "start a dive" image only */
+        }
+        
+        /* Right side different background images */
+        #rightContainer .background1 {
+            background-image: url('https://i.imgur.com/eLOPCp2.png');
+        }
+        
+        #rightContainer .background2 {
+            background-image: url('https://i.imgur.com/QWeM2G7.png');
+        }
+        
+        #rightContainer .diveStartBackground {
+            background-image: url('https://i.imgur.com/Vt9qXT0.png');
+        }
+		
+        .circle { /* The stick */
+            position: absolute;
+            z-index: 10; /* Ensure the stick appears above the canvas */
+			transform-origin: center;
+			overflow: visible; /* Ensure internal contents aren't clipped */
+        }
+		
+        .coordDisplay {
+            position: absolute;
+            bottom: 24px;
+            right: 24px;
+            color: white;
+            font-family: Calibri, sans-serif;
+            font-size: 20px;
+            font-weight: bold;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(20, 20, 20, 0.9));
+            padding: 10px 16px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5), 0 2px 4px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(8px);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+            line-height: 1.4;
+            min-width: 96px;
+            z-index: 5;
+        }
+        .canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 9; /* Ensures trail appears above */
+        }
+        
+        /* Hidden canvases for mask detection */
+        .maskCanvas {
+            display: none;
+        }
+		
+		#toggleContainer {
+    		position: absolute;
+    		bottom: 24px;
+    		left: 24px;
+    		z-index: 15;
+    		background: linear-gradient(135deg, rgba(0, 0, 0, 0.7), rgba(20, 20, 20, 0.7));
+    		padding: 10px 16px;
+    		border-radius: 12px;
+			border: 1px solid rgba(255, 255, 255, 0.2);
+			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5), 0 2px 4px rgba(0, 0, 0, 0.3);
+			backdrop-filter: blur(8px);
+			text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+			line-height: 1.2;
+			min-width: 96px;
+    		color: white;
+    		font-family: Neris, sans-serif;
+    		font-size: 20px;
+			font-weight: 600;
+    		display: flex;
+			flex-direction: column;
+    		align-items: center;
+    		gap: 8px;
+		}
+		
+        #toggleButton {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.7), rgba(20, 20, 20, 0.7));
+			font-family: Neris, sans-serif;
+			font-size: 18px;
+            color: white;
+            border: 1px solid #555;
+            padding: 4px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        
+        #toggleButton:hover {
+            background: #777;
+        }
+        
+        #fpsDisplay {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            color: white;
+            font-family: Calibri, sans-serif;
+            font-size: 26px;
+			background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(20, 20, 20, 0.9));
+            padding: 10px 16px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5), 0 2px 4px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(8px);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+            display: none; /* comment out or not this line to show/hide the fps display */
+			min-width: 109px;
+            z-index: 20;
+        }
+    </style>
+</head>
+<body>
+    <div id="mainWrapper">
+        <!-- Left container (original) -->
+        <div id="leftContainer" class="container">
+            <div class="background1"></div>
+            <div class="background2"></div>
+            <div class="diveStartBackground"></div>
+            <canvas class="canvas" width="1032" height="1032"></canvas>
+			<svg class="circle" width="20" height="20" viewBox="0 0 20 20">
+				<!-- Cyan circle -->
+				<circle cx="10" cy="10" r="10" fill="cyan"/>
+				<!-- Black crosshair -->
+                <line x1="10" y1="4" x2="10" y2="16" stroke="black" stroke-width="2"/>
+                <line x1="4" y1="10" x2="16" y2="10" stroke="black" stroke-width="2"/>
+			</svg>
+            <div class="coordDisplay">
+                x: 0.00%<br>
+                y: 0.00%
+            </div>
+			<div class="titleDisplay">Raw left stick input</div>
+        </div>
+		
+        <!-- Right container (with deadzone mapping) -->
+        <div id="rightContainer" class="container">
+            <div class="background1"></div>
+            <div class="background2"></div>
+            <div class="diveStartBackground"></div>
+            <canvas class="canvas" width="1032" height="1032"></canvas>
+			<svg class="circle" width="20" height="20" viewBox="0 0 20 20">
+				<!-- Cyan circle -->
+				<circle cx="10" cy="10" r="10" fill="cyan"/>
+				<!-- Black crosshair -->
+                <line x1="10" y1="4" x2="10" y2="16" stroke="black" stroke-width="2"/>
+                <line x1="4" y1="10" x2="16" y2="10" stroke="black" stroke-width="2"/>
+			</svg>
+            <div class="coordDisplay">
+                x: 0.00%<br>
+                y: 0.00%
+            </div>
+			<div class="titleDisplay">Journey processed left stick input</div>
+    		<div id="toggleContainer">
+        		<div>Input Mode:</div>
+        		<button id="toggleButton">Smooth</button>
+    		</div>
+			<div id="fpsDisplay">FPS: Calculating...</div>
+        </div>
+		
+		<!-- Legend container -->
+        <div id="legendContainer" class="legendContainer">
+            <div class="legendImage"></div>
+            <div class="legendTitle">Maximum Boost Energy and<br>Required Charging Time</div>
+        </div>
+    </div>
+    
+    <!-- Hidden canvases for mask detection - Right side -->
+    <canvas id="rightMaskCanvas1" class="maskCanvas" width="1032" height="1032"></canvas>
+    <canvas id="rightMaskCanvas2" class="maskCanvas" width="1032" height="1032"></canvas>
+    
+    <script>
+        // Game pressure points mapping (from your data)
+        const pressurePoints = [
+            0, 0.00000186, 0.98, 2.45, 3.43, 4.41, 5.39, 6.86, 7.84, 8.82, 10.29, 11.27, 12.25, 13.24, 14.71, 15.69, 16.67, 18.14, 19.12, 20.10, 21.08, 22.55, 23.53, 24.51, 25.98, 26.96, 27.94, 28.92, 30.39, 31.37, 32.35, 33.82, 34.80, 35.78, 36.76, 38.24, 39.22, 40.20, 41.67, 42.65, 43.63, 44.61, 46.08, 47.06, 48.04, 49.51, 50.49, 51.47, 52.45, 53.92, 54.90, 55.88, 57.35, 58.33, 59.31, 60.29, 61.76, 62.75, 63.73, 65.20, 66.18, 67.16, 68.14, 69.12, 70.59, 71.57, 73.04, 74.02, 75.00, 75.98, 77.45, 78.43, 79.41, 80.88, 81.86, 82.84, 83.82, 85.29, 86.27, 87.25, 88.73, 89.71, 90.69, 91.66, 93.14, 94.12, 95.10, 96.57, 97.55, 98.53, 100.00
+        ];
+        
+        // True stick inputs corresponding to pressure points (minimum thresholds)
+        const trueInputs = [
+            0, 29.690, 30.471, 31.253, 32.034, 32.815, 33.596, 34.378, 35.159, 35.940, 36.722, 37.503, 38.284, 39.065, 39.847, 40.628, 41.409, 42.190, 42.972, 43.753, 44.534, 45.316, 46.097, 46.878, 47.659, 48.441, 49.222, 50.003, 50.785, 51.566, 52.347, 53.128, 53.910, 54.691, 55.472, 56.253, 57.035, 57.816, 58.597, 59.379, 60.160, 60.941, 61.722, 62.504, 63.285, 64.066, 64.848, 65.629, 66.410, 67.191, 67.973, 68.754, 69.535, 70.316, 71.098, 71.879, 72.660, 73.442, 74.223, 75.004, 75.785, 76.567, 77.348, 78.129, 78.911, 79.692, 80.473, 81.254, 82.036, 82.817, 83.598, 84.379, 85.161, 85.942, 86.723, 87.505, 88.286, 89.067, 89.848, 90.630, 91.411, 92.192, 92.974, 93.755, 94.536, 95.317, 96.099, 96.880, 97.661, 98.442, 99.224, 100.000
+        ];
+        
+        // Global settings
+        let customZoom = 1;
+		let discreteMode = true; // Toggle between free movement and discrete pressure points
+        const centerX = 516;
+        const centerY = 516;
+        const scaleFactor = 500;
+        const deadzone = 29.689; // Deadzone percentage
+        
+        // Initialize containers
+        const leftContainer = document.getElementById('leftContainer');
+        const rightContainer = document.getElementById('rightContainer');
+        const toggleButton = document.getElementById('toggleButton');
+		toggleButton.textContent = 'Game-accurate'; // Show correct label at startup
+        const fpsDisplay = document.getElementById('fpsDisplay');
+        
+        // Get elements for both containers
+        const leftElements = {
+            canvas: leftContainer.querySelector('.canvas'),
+            circle: leftContainer.querySelector('.circle'),
+            coordDisplay: leftContainer.querySelector('.coordDisplay'),
+            background1: leftContainer.querySelector('.background1'),
+            background2: leftContainer.querySelector('.background2'),
+            diveStartBackground: leftContainer.querySelector('.diveStartBackground'),
+        };
+        
+        const rightElements = {
+            canvas: rightContainer.querySelector('.canvas'),
+            circle: rightContainer.querySelector('.circle'),
+            coordDisplay: rightContainer.querySelector('.coordDisplay'),
+            background1: rightContainer.querySelector('.background1'),
+            background2: rightContainer.querySelector('.background2'),
+            diveStartBackground: rightContainer.querySelector('.diveStartBackground'),
+            maskCanvas1: document.getElementById('rightMaskCanvas1'),
+            maskCanvas2: document.getElementById('rightMaskCanvas2'),
+        };
+		
+		const legendElements = {
+			container: document.getElementById('legendContainer'),
+			image: document.querySelector('.legendImage'),
+			title: document.querySelector('.legendTitle')
+		};
+        
+        // Initialize contexts
+        const leftCtx = leftElements.canvas.getContext('2d');
+        const rightCtx = rightElements.canvas.getContext('2d');
+        
+        // Mask contexts
+        const rightMaskCtx1 = rightElements.maskCanvas1.getContext('2d');
+        const rightMaskCtx2 = rightElements.maskCanvas2.getContext('2d');
+        
+        // State variables
+        let leftCurrentBackground = 1;
+        let rightCurrentBackground = 1;
+        let leftDiveStartVisible = true;
+        let rightDiveStartVisible = true;
+		let legendVisible = false;
+        
+        let leftPreviousPositions = [];
+        let rightPreviousPositions = [];
+        
+        let fps = 60;
+        let lockedFPS = 60;
+        let lastFrameTime = performance.now();
+        let fpsValues = [];
+        const fpsMeasureInterval = 1000;
+        
+        const trailSettings = {
+            30: { maxPositions: 9 },
+            60: { maxPositions: 15 },
+            120: { maxPositions: 32 },
+        };
+        
+        // Initialize stick positions at center
+        leftElements.circle.style.left = `${centerX - 10}px`;
+        leftElements.circle.style.top = `${centerY - 10}px`;
+        rightElements.circle.style.left = `${centerX - 10}px`;
+        rightElements.circle.style.top = `${centerY - 10}px`;
+        
+        // Toggle button functionality
+        toggleButton.addEventListener('click', () => {
+            discreteMode = !discreteMode;
+            toggleButton.textContent = discreteMode ? 'Game-accurate' : 'Smooth';
+        });
+        
+        // Load mask images
+		function loadMasks() {
+			// Right side masks (for background switching: reads in-game pressure)
+			const rightMask1 = new Image();
+			rightMask1.crossOrigin = 'anonymous';
+			rightMask1.onload = function() {
+				rightMaskCtx1.drawImage(rightMask1, 0, 0, 1032, 1032);
+				rightMasksLoaded = true;
+			};
+			rightMask1.src = 'https://i.imgur.com/C0sMtLX.png';
+			
+			const rightMask2 = new Image();
+			rightMask2.crossOrigin = 'anonymous';
+			rightMask2.onload = function() {
+				rightMaskCtx2.drawImage(rightMask2, 0, 0, 1032, 1032);
+			};
+			rightMask2.src = 'https://i.imgur.com/0dhlHXb.png';
+		}
+        
+        // Check if stick position hits black area in mask
+        function isOnBlackArea(x, y, maskCtx) {
+            x = Math.max(0, Math.min(1031, Math.round(x)));
+            y = Math.max(0, Math.min(1031, Math.round(y)));
+            
+            try {
+                const pixelData = maskCtx.getImageData(x, y, 1, 1).data;
+                const r = pixelData[0];
+                const g = pixelData[1];
+                const b = pixelData[2];
+                const brightness = (r + g + b) / 3;
+                return brightness < 50;
+            } catch (e) {
+                return false;
+            }
+        }
+        
+        // Background switching logic
+		function checkBackgroundSwitch(rightTargetX, rightTargetY, processedX, processedY) {
+			if (!rightMasksLoaded) return;
+			
+			// Handle dive start fade out using processed Y coordinate (upward only)
+			if (leftDiveStartVisible || rightDiveStartVisible) {
+				const yPressurePercent = processedY * 100;
+				
+				if (yPressurePercent >= 75.0) {
+					// Fade out BOTH dive start backgrounds simultaneously
+					leftElements.diveStartBackground.style.opacity = '0';
+					rightElements.diveStartBackground.style.opacity = '0';
+					leftDiveStartVisible = false;
+					rightDiveStartVisible = false;
+					
+					// Show legend when dive starts
+					if (!legendVisible) {
+						legendElements.image.style.opacity = '1';
+						legendElements.title.style.opacity = '1';
+						legendVisible = true;
+					}
+				}
+			}
+			
+			// Check if stick is in deadzone first
+			const gamepad = navigator.getGamepads()[0];
+			if (gamepad) {
+				const leftStickX = gamepad.axes[0];
+				const leftStickY = -gamepad.axes[1];
+				const absLeftStickX = Math.abs(leftStickX) * 100; //abs for being positive toward left or right
+				const absLeftStickY = Math.abs(leftStickY) * 100;
+				const isInDeadzone = absLeftStickX <= deadzone && absLeftStickY <= deadzone;
+				
+				if (isInDeadzone) {
+					// Force background 1 when in deadzone
+					switchToBackground(1);
+				} else {
+					// Normal background switching logic using processed stick position from right side
+					if (leftCurrentBackground === 1) {
+						if (isOnBlackArea(rightTargetX, rightTargetY, rightMaskCtx1)) {
+							switchToBackground(2);
+						}
+					} else {
+						if (isOnBlackArea(rightTargetX, rightTargetY, rightMaskCtx2)) {
+							switchToBackground(1);
+						}
+					}
+				}
+			}
+		}
+		
+		function switchToBackground(targetBackground) {
+			if (leftCurrentBackground === targetBackground) return;
+
+			leftCurrentBackground = targetBackground;
+			rightCurrentBackground = targetBackground;
+
+			if (targetBackground === 2) {
+				// Fade in background 2 (it's already on top due to higher z-index)
+				leftElements.background2.style.opacity = '1';
+				rightElements.background2.style.opacity = '1';
+				// Background 1 stays at opacity 1 underneath, so no white flash
+			} else {
+				// Fade out background 2 (revealing background 1 underneath)
+				leftElements.background2.style.opacity = '0';
+				rightElements.background2.style.opacity = '0';
+				// Background 1 is always visible underneath
+			}
+		}
+        
+        // Find pressure point for discrete mode based on threshold ranges
+        function findPressurePointByThreshold(inputPercent) {
+            // Handle values beyond normal range (clamping scenarios)
+            if (inputPercent >= 100.000) {
+                return pressurePoints[pressurePoints.length - 1] / 100; // Return max pressure
+            }
+            
+            // Find the appropriate pressure point based on threshold ranges
+            for (let i = trueInputs.length - 1; i >= 0; i--) {
+                if (inputPercent >= trueInputs[i]) {
+                    return pressurePoints[i] / 100;
+                }
+            }
+            
+            // Fallback to 0 if no threshold is met
+            return 0;
+        }
+        
+        // Deadzone mapping function
+		function applyDeadzoneMapping(rawInput) {
+			// Handle NaN or invalid inputs
+			if (!isFinite(rawInput) || isNaN(rawInput)) {
+				return 0;
+			}
+			
+			const absInput = Math.abs(rawInput);
+			const sign = Math.sign(rawInput);
+			
+			// If within deadzone, return 0
+			if (absInput <= deadzone / 100) {
+				return 0;
+			}
+			
+			// Convert to in-game pressure value
+			const inputPercent = absInput * 100;
+			
+			if (discreteMode) {
+				// Use discrete pressure point mapping
+				const pressureValue = findPressurePointByThreshold(inputPercent);
+				return sign * pressureValue;
+			} else {
+				// Use smooth linear interpolation from deadzone to max
+				const normalizedInput = (absInput - deadzone / 100) / (1 - deadzone / 100);
+				return sign * Math.max(0, Math.min(1, normalizedInput));
+			}
+		}
+		
+		function applyJourneyClamping(xInGame, yInGame) {
+			// Calculate magnitude
+			const magnitude = Math.sqrt(xInGame * xInGame + yInGame * yInGame);
+			
+			// If magnitude is greater than 1, apply clamping
+			if (magnitude > 1) {
+				const xClamped = xInGame / magnitude;
+				const yClamped = yInGame / magnitude;
+				return { x: xClamped, y: yClamped };
+			}
+			
+			// No clamping needed
+			return { x: xInGame, y: yInGame };
+		}
+        
+        // FPS detection
+        function detectFPS(timestamp) {
+            const delta = timestamp - lastFrameTime;
+            const currentFPS = 1000 / delta;
+            lastFrameTime = timestamp;
+            
+            fpsValues.push(currentFPS);
+            if (fpsValues.length > 130) fpsValues.shift();
+            
+            const averageFPS = fpsValues.reduce((a, b) => a + b, 0) / fpsValues.length;
+            fpsDisplay.textContent = `FPS: ${averageFPS.toFixed(1)}`;
+            fps = averageFPS;
+            
+            requestAnimationFrame(detectFPS);
+        }
+        
+        function updateLockedFPS() {
+            if (fpsValues.length < 130) {
+                lockedFPS = 60;
+            } else {
+                const detectedFPS = Math.max(...fpsValues);
+                lockedFPS = detectedFPS >= 90 ? 120 : detectedFPS >= 45 ? 60 : 30;
+            }
+            
+            const { maxPositions } = trailSettings[lockedFPS];
+            leftPreviousPositions.splice(maxPositions);
+            rightPreviousPositions.splice(maxPositions);
+            
+            setTimeout(updateLockedFPS, fpsMeasureInterval);
+        }
+        
+        // Stick position update
+        function updateStickPosition() {
+            const gamepad = navigator.getGamepads()[0];
+            if (gamepad) {
+                const leftStickX = gamepad.axes[0];
+                const leftStickY = -gamepad.axes[1];
+                
+                // Left side (original behavior)
+                updateCoordinateDisplay(leftStickX, leftStickY, 'left');
+                const leftTargetX = centerX + leftStickX * scaleFactor;
+                const leftTargetY = centerY - leftStickY * scaleFactor;
+                
+                leftPreviousPositions.unshift({ x: leftTargetX, y: leftTargetY });
+                const { maxPositions } = trailSettings[lockedFPS];
+                if (leftPreviousPositions.length > maxPositions) leftPreviousPositions.splice(maxPositions);
+                
+                drawTrail('left');
+                // Center the SVG (adjusted for 20x20 SVG)
+                leftElements.circle.style.left = `${leftTargetX - 10}px`;
+                leftElements.circle.style.top = `${leftTargetY - 10}px`;
+                
+				// Right side (with Journey's exact processing)
+				const mappedX = applyDeadzoneMapping(leftStickX);
+				const mappedY = applyDeadzoneMapping(leftStickY);
+
+				// Apply Journey's clamping logic
+				const clampedResult = applyJourneyClamping(mappedX, mappedY);
+				const finalX = clampedResult.x;
+				const finalY = clampedResult.y;
+
+				updateCoordinateDisplay(finalX, finalY, 'right');
+
+				const rightTargetX = centerX + finalX * scaleFactor;
+				const rightTargetY = centerY - finalY * scaleFactor;
+
+				checkBackgroundSwitch(rightTargetX, rightTargetY, finalX, finalY);
+
+				rightPreviousPositions.unshift({ x: rightTargetX, y: rightTargetY });
+				if (rightPreviousPositions.length > maxPositions) rightPreviousPositions.splice(maxPositions);
+
+				drawTrail('right');
+				// Center the SVG (adjusted for 20x20 SVG)
+				rightElements.circle.style.left = `${rightTargetX - 10}px`;
+				rightElements.circle.style.top = `${rightTargetY - 10}px`;
+            }
+            requestAnimationFrame(updateStickPosition);
+        }
+        
+        // Draw trail
+        function drawTrail(side) {
+            const ctx = side === 'left' ? leftCtx : rightCtx;
+            const canvas = side === 'left' ? leftElements.canvas : rightElements.canvas;
+            const positions = side === 'left' ? leftPreviousPositions : rightPreviousPositions;
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            for (let i = 0; i < positions.length - 1; i++) {
+                const pos1 = positions[i];
+                const pos2 = positions[i + 1];
+                
+                const progress = i / positions.length;
+                
+                const r = Math.floor(255 * progress);
+                const g = 255 - r;
+                const b = 255;
+                const alpha = 1 - progress;
+                
+                ctx.shadowColor = 'black';
+                ctx.shadowBlur = 0;
+                ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, ${alpha})`;
+                ctx.lineWidth = 12 * (1 - progress) + 2;
+                
+                ctx.beginPath();
+                ctx.moveTo(pos1.x, pos1.y);
+                ctx.lineTo(pos2.x, pos2.y);
+                ctx.stroke();
+            }
+        }
+        
+        function updateCoordinateDisplay(x, y, side) {
+            const coordDisplay = side === 'left' ? leftElements.coordDisplay : rightElements.coordDisplay;
+            
+            // Handle the special tiny pressure value display
+            let xPercent, yPercent;
+            
+            if (isFinite(x) && !isNaN(x)) {
+                const absX = Math.abs(x * 100);
+                if (absX > 0 && absX < 0.01) {
+                    xPercent = x >= 0 ? '0.00+%' : '-0.00+%';
+                } else {
+                    xPercent = (x * 100).toFixed(2) + '%';
+                }
+            } else {
+                xPercent = '0.00%';
+            }
+            
+            if (isFinite(y) && !isNaN(y)) {
+                const absY = Math.abs(y * 100);
+                if (absY > 0 && absY < 0.01) {
+                    yPercent = y >= 0 ? '0.00+%' : '-0.00+%';
+                } else {
+                    yPercent = (y * 100).toFixed(2) + '%';
+                }
+            } else {
+                yPercent = '0.00%';
+            }
+            
+            coordDisplay.innerHTML = `x: ${xPercent}<br>y: ${yPercent}`;
+        }
+        
+        function resizeOverlay() {
+            const maxHeight = 1032 + 80; // Include space for titles;
+            const totalWidth = 1032 * 2 + 391 + 0; // Two containers plus legend container plus gaps between graphics
+            const baseScale = Math.min(
+                window.innerWidth / totalWidth,
+                window.innerHeight < maxHeight ? window.innerHeight / (1032 + 80) : 1
+            );
+            document.getElementById('mainWrapper').style.transform = `scale(${baseScale * customZoom})`;
+        }
+        
+        // Initialize everything
+        loadMasks();
+        requestAnimationFrame(detectFPS);
+        updateLockedFPS();
+        updateStickPosition();
+        window.addEventListener('resize', resizeOverlay);
+		
+		// Custom zoom functionality
+		document.addEventListener('wheel', function(e) {
+			if (e.ctrlKey) {
+				e.preventDefault();
+				
+				const zoomSpeed = 0.1;
+				if (e.deltaY < 0) {
+					customZoom = Math.min(customZoom + zoomSpeed, 3); // Max zoom 3x
+				} else {
+					customZoom = Math.max(customZoom - zoomSpeed, 0.2); // Min zoom 0.2x
+				}
+				
+				resizeOverlay(); // Use this instead of directly setting transform
+			}
+		}, { passive: false });
+		document.addEventListener('keydown', function (e) {
+			if (e.ctrlKey) {
+				const zoomSpeed = 0.1;
+				let zoomChanged = false;
+
+				// Zoom in: Ctrl + '+' (which may be '=') or Ctrl + NumpadAdd
+				if (e.key === '+' || e.key === '=' || e.key === 'Add') {
+					customZoom = Math.min(customZoom + zoomSpeed, 3);
+					zoomChanged = true;
+				}
+
+				// Zoom out: Ctrl + '-' or Ctrl + NumpadSubtract
+				if (e.key === '-' || e.key === 'Subtract') {
+					customZoom = Math.max(customZoom - zoomSpeed, 0.2);
+					zoomChanged = true;
+				}
+
+				if (zoomChanged) {
+					e.preventDefault(); // Prevent browser default zoom
+					resizeOverlay();
+				}
+			}
+		});
+		
+        resizeOverlay();
+    </script>
+</body>
+</html>
