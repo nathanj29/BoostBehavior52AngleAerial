@@ -62,9 +62,10 @@ The slow or flap pressure range thresholds will also shift based on the camera a
 The maximum boost energy you can charge will also be reduced with flatter camera angles.
 
 As a comparison, for Dropshoot-based techniques the overall boost graphic would become more complex:
-* Slow and flap pressure range thresholds (white lines) would be slightly different.
+* Boost energy colors would look very similar overall, if not the same. This means upon using full stick pressure with a 52° angle Dropshoot, this tool would still be very accurate !
+* Slow and flap pressure range thresholds (white lines) would be very slightly different in their shape.
 * Lighter flap pressure becomes impossible to apply without lifting off the ground, especially on sand as opposed to solid ground.
-* The jump animation transition (blue line) moves up significantly and instead of being a "twirl vs flap" jump type, "twirl" is replaced by either twirling or running normally, and "flap" is replaced by a [variety of unique jumping animations](https://youtu.be/-50GmclgT5c) which change based on how the wayfarer was moving before the initial dive (standing still, walking, or sliding)... Being under this blue curve is only possible on solid ground which offers a more stable contact.
+* The jump animation transition (blue line) moves up significantly and instead of showing a "twirl vs flap" transition, "twirl" is replaced by either twirling or running normally, and "flap" is replaced by a [variety of unique jumping animations](https://youtu.be/-50GmclgT5c) which change based on how the wayfarer was moving prior to the initial dive (standing still, walking, or sliding)... Being under this blue curve is only possible on solid ground which offers a more stable contact.
 
 
 
