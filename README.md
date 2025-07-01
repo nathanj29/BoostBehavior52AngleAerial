@@ -10,7 +10,8 @@ Visit [this link](https://nathanj29.github.io/BoostBehavior52AngleAerial/) to us
 
 
 
-Upon applying a **full stick pressure**, the boost energy colors also perfectly translate to in-game **horizontal speed** !
+It is good to keep in mind that upon applying a **full stick pressure**, max boost energy colors also perfectly correlates to in-game **horizontal speed** ! (lower boost energy = more speed)
+On top of that, even though this tool is for aerial dives, the max boost energy colors should look mostly the same for dropshoots. This means you can consider the **outer ring of the left stick** to be both a **boost energy meter and speed meter** (for aerial dives and dropshoots). sideways ds for speedruns...
 
 
 
