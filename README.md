@@ -65,18 +65,18 @@ _Journey_ recognizes only 90 fixed stick pressure values outside of the deadzone
 
 ![chart pressure comparison](https://i.imgur.com/OyyFeJm.png) reupload updated version...
 
-Game-processed recognized pressure points were written down from Cheat Engine, and here is the formula that was used to find the raw stick input corresponding to every steps:
+Game-processed pressure points were written from observed values with Cheat Engine, and here is the formula that was used to find the raw stick input corresponding to every steps:
 
-    formula
+![math formula](https://i.imgur.com/8WMHyAW.png)
 
 
 
 ### Input mode
 2 input modes are available to show the game-processed left stick pressure: Game-accurate and Smooth.
 
-The game-accurate mode only snaps the right stick over the 90 recognized stick pressures. It perfectly translates how _Journey_ interprets the raw input.
+The **game-accurate** mode only snaps the right stick over the 90 recognized stick pressures. It perfectly translates how _Journey_ interprets the raw input.
 
-The smooth mode is just a linear interpolation from the raw stick input after ignoring the vertical or horizontal axis deadzones. This mode may be visually more pleasing upon moving the left stick, but it shows less precision in regards to how _Journey_ really handles stick pressure.
+The **smooth** mode is just a linear interpolation from the raw stick input after ignoring the vertical or horizontal axis deadzones. This mode may be visually more pleasing upon moving the left stick, but it shows less precision in regards to how _Journey_ really handles stick pressure.
 
 
 
