@@ -17,7 +17,7 @@ Visit [this link](https://nathanj29.github.io/BoostBehavior52AngleAerial/) to us
 * Displays the maximum boost energy you can charge for every stick positions.
 * The legend compares maximum boost energy and charging time required to reach it.
 * Toggles between Flap and Slow pressure range (Also includes the "full" stick pressure).
-* Shows the "twirl" vs "flap" 50% pressure circle that dictates the jumping animation the wayfarer has in the air : Avoid twirling for Flap boosting as you won't jump as high.
+* Shows the "twirl" vs "flap" 50% pressure circle that dictates the jumping animation the wayfarer has in the air upon being in the flap pressure range: Avoid twirling for Flap boosting as you won't jump as high.
 * Lets you select between 2 input modes: "Game-accurate" or "Smooth"
 * Measures the framerate the tool is running at to better adjust the left stick trail length.
 * You can **zoom in and out** by resizing the browser window, doing ctrl + mouse wheel, or doing ctrl and the + or - key.
@@ -53,22 +53,35 @@ If diving on the ground instead (**Dropshoot**):
 * Max boost energy colors would look very similar, if not the same. 
 * Slow and flap pressure range thresholds would be very slightly different in their shape.
 * Lighter flap pressure becomes impossible to apply without lifting off the ground, especially on sand as opposed to solid ground.
-* The jump animation transition (blue curve) would move up significantly and instead of showing a "twirl vs flap" transition, "twirl" would be replaced by either twirling or running normally, and "flap" would be replaced by a [variety of unique jumping animations](https://youtu.be/-50GmclgT5c) which change based on how the wayfarer was moving prior to the initial dive (standing still, walking, or sliding)... Being under this blue curve is only possible on solid ground which offers a more stable contact.
+* The jump animation transition (blue curve) would move up significantly and instead of showing a "twirl vs flap" transition, "twirl" would be replaced by either twirling or running normally, and "flap" would be replaced by a [variety of unique jumping animations](https://youtu.be/-50GmclgT5c) which change based on how the wayfarer was moving prior to the initial dive (standing still, walking, or sliding)... Being under this blue curve is only possible on solid ground, which offers a more stable contact.
 
-Note **holding the camera stick fully sideways** also greatly impacts the way these graphics look. Being **frozen** does too... Or being in **Paradise**...
-
-
-
-## fgjlkdjgkd
-![chart pressure comparison](https://i.imgur.com/OyyFeJm.png)
-
-_Journey_ recognizes 90 possible stick pressure points (outside of 0% in-game pressure, measured whenever the stick is in the deadzone). These pressure points are scaled from the raw stick input used for this tool: each are spaced by 0.781% with one another, but they don't recessarily return in-game pressure spaced equally ! The gold lines correspond to **the minimal vertical pressure range the game acknowledges**, which return an in-game camera pressure of 0,00000186%.
-The true stick pressure to apply for this ranges from between 29.690% to 30.470%.
+Other situations for which these grahics would look very different include: **Holding the camera stick fully sideways**, being **frozen**, or being in **Paradise**.
 
 
 
-Smooth vs game accurate
-smooth = linear interpolation of stick pressure from the raw stick input after ignoring the vertical or horizontal axis deadzones. This mode may be visually more pleasing but has less precision.
+## Stick pressure
+### Recognized pressure points
+_Journey_ recognizes only 90 fixed stick pressure values outside of the deadzone. These pressure points are scaled from the raw stick input every 0.781% (See chart below). The corresponding game-processed pressure values however are not equally spaced with each other: They follow an odd pattern with gaps of either 0.98% or 1.47% between steps (or 0,00000186% for the first step).
+
+![chart pressure comparison](https://i.imgur.com/OyyFeJm.png) reupload updated version...
+
+Game-processed recognized pressure points were written down from Cheat Engine, and here is the formula that was used to find the raw stick input corresponding to every steps:
+
+    formula
+
+
+
+### Input mode
+2 input modes are available to show the game-processed left stick pressure: Game-accurate and Smooth.
+
+The game-accurate mode only snaps the right stick over the 90 recognized stick pressures. It perfectly translates how _Journey_ interprets the raw input.
+
+The smooth mode is just a linear interpolation from the raw stick input after ignoring the vertical or horizontal axis deadzones. This mode may be visually more pleasing upon moving the left stick, but it shows less precision in regards to how _Journey_ really handles stick pressure.
+
+
+
+### Clamping
+Clamping of 90 values or smooth mode different
 
 
 
