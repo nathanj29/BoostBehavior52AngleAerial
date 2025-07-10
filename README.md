@@ -18,7 +18,7 @@ Visit [this link](https://nathanj29.github.io/BoostBehavior52AngleAerial/) to us
 * The legend compares maximum boost energy and charging time required to reach it.
 * Toggles between Flap and Slow pressure range (Also includes the "full" stick pressure).
 * Shows the "twirl" vs "flap" 50% pressure circle that dictates the jumping animation the wayfarer has in the air upon being in the flap pressure range: Avoid twirling for Flap boosting as you won't jump as high.
-* Lets you select between 2 input modes: "Game-accurate" or "Smooth"
+* Lets you select between 2 input modes, by clicking the coresponding button: "Game-accurate" or "Smooth".
 * Measures the framerate the tool is running at to better adjust the left stick trail length.
 * You can **zoom in and out** by resizing the browser window, doing ctrl + mouse wheel, or doing ctrl and the + or - key.
 
@@ -61,22 +61,39 @@ Other situations for which these grahics would look very different include: **Ho
 
 ## Stick pressure
 ### Recognized pressure points
-_Journey_ recognizes only 90 fixed stick pressure values outside of the deadzone. These pressure points are scaled from the raw stick input every 0.781% (See chart below). The corresponding game-processed pressure values however are not equally spaced with each other: They follow an odd pattern with gaps of either 0.98% or 1.47% between steps (or 0,00000186% for the first step).
+_Journey_ recognizes only 90 fixed stick pressure values when outside the deadzone, for either axis. These pressure points are scaled from the raw stick input every 0.781% (or 0.776% for the last step). The corresponding game-processed pressure values however are not equally spaced with each other: They follow an odd pattern with gaps of either 0.98% or 1.47% between steps (or even 0,00000186% for the first step).
 
+<details>
+<summary>Click to view a chart listing every possible pressure values, raw and Journey-processed :</summary>
+    
 ![chart pressure comparison](https://i.imgur.com/OyyFeJm.png) reupload updated version...
+</details>
 
-Game-processed pressure points were written from observed values with Cheat Engine, and here is the formula that was used to find the raw stick input corresponding to every steps:
+<details>
+<summary>Click for details on how this chart was made :</summary>
 
+    
+Game-processed pressure points were simply written down one by one from observed values with Cheat Engine. It was confirmed the boost energy you can charge is also based on these 90 increments of possible pressure only.
+
+Here is the formula that was used to find the raw stick input corresponding to each of these 90 steps:
+    
 ![math formula](https://i.imgur.com/8WMHyAW.png)
+
+In this formula, 29.690% corresponds to the first pressure input the game returns as a value different than 0.
+
+(100% - 29.690% + 0.005%) is the full span of the recognized raw input range, with a correction factor for the shorter last step.
+
+The accuracy of raw input pressure range vs game-pressure was confirmed via testing upon using the [hardwaretester website](https://hardwaretester.com/gamepad) with several browsers.
+</details>
 
 
 
 ### Input mode
-2 input modes are available to show the game-processed left stick pressure: Game-accurate and Smooth.
+2 input modes are available to display the _Journey_-processed left stick pressure: Game-accurate and Smooth.
 
-The **game-accurate** mode only snaps the right stick over the 90 recognized stick pressures. It perfectly translates how _Journey_ interprets the raw input.
+The **game-accurate** mode only snaps the right stick over the 90 recognized stick pressure positions. It perfectly translates how _Journey_ interprets the raw stick input.
 
-The **smooth** mode is just a linear interpolation from the raw stick input after ignoring the vertical or horizontal axis deadzones. This mode may be visually more pleasing upon moving the left stick, but it shows less precision in regards to how _Journey_ really handles stick pressure.
+The **smooth** mode consists in a linear interpolation from the raw stick input after ignoring the vertical or horizontal axis deadzones. This mode may be visually more pleasing upon moving the left stick, but it shows less precision in regards to the true stick coordinates in-game.
 
 
 
