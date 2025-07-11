@@ -113,7 +113,7 @@ This mechanic of having stronger diagonal input possibilities is called the « A
 When a game processes raw stick inputs, it often ensures inputs with a magnitude bigger than 1 are corrected by clamping their pressure value back over the circumference of a circle with a magnitude of 1. This helps preventing too strong inputs that would otherwise lead to faster diagonal movements or unusual camera speed.
 
 _Journey_ with its stick input processing logic however completely bypasses the ridiculously huge horizontal and vertical axis deadzones (thus starting at 29.690% pressure).
-This leads to the "magnitude = 1" representation no longer lying on the circumference of a circle, but instead on **a bigger square with rounded corners**, where the arching starts at the edges of the horizontal and vertical axis deadzones. This shape corresponds to the **gold dashed line** you can view on the following image, and **it represents a magnitude of 1 for every input directions based on _Journey_'s mapping** (or to put it simply: the expected range of motion to reach for _Journey_) ! It's on this line that _Journey_ clamps back too strong left stick inputs.
+This leads to the "magnitude = 1" representation no longer lying on the circumference of a circle, but instead on **a bigger square with rounded corners**, where the arching starts at the edges of the horizontal and vertical axis deadzones. This shape corresponds to the **gold dashed line** you can view on the following image, and **it represents a magnitude of 1 for every input directions based on _Journey_'s mapping** (or to put it simply: the expected range of motion to reach for _Journey_) ! It's over this line that _Journey_ clamps back too strong left stick inputs.
 
 ![clamping explained](https://i.imgur.com/Dzn3XNZ.png)
 
@@ -121,11 +121,16 @@ This leads to the "magnitude = 1" representation no longer lying on the circumfe
 
 The problem with this bigger "magnitude = 1" shape is that even with some stick radial deviation, **most controller brands won't be able to reach it fully** in every directions ! (At least not without a custom re-calibration of pressure sensitivity, or worn out sticks.) This leads to the wayfarer most likely **not walking as fast if you hold the left stick in diagonals**, which can also translates into lower speed when Fancy Flying not completely on the vertical axis of the left stick...
 
-This can result in some controllers being more advantageous than others for _Journey_, if their stick radial deviation is bigger.
+This results in some controllers being more advantageous than others for _Journey_, if their stick radial deviation is bigger.
 
 ### Clamping explained
 
-magic formula under spoilers
+To determine if clamping should occur the **magnitude** is first calculated by using this formula ; with X and Y being the Journey-processed pressure coordinates: **√(X² + Y²)**
+
+If the magnitude is bigger than 1, the new stick coordinates are calculated as follows:
+**Xclamped = X / magnitude**
+
+**Yclamped = Y / magnitude**
 
 
 
