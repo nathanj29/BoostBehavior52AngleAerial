@@ -70,8 +70,7 @@ _Journey_ recognizes only 90 fixed stick pressure values when outside the deadzo
 </details>
 
 <details>
-<summary>Click for details on how this chart was made :</summary>
-
+<summary>Click for details about how this chart was made :</summary>
     
 Game-processed pressure points were simply written down one by one from observed values with Cheat Engine. It was confirmed the boost energy you can charge is also based on these 90 increments of possible pressure only.
 
@@ -83,8 +82,50 @@ In this formula, 29.690% corresponds to the first pressure input the game return
 
 (100% - 29.690% + 0.005%) is the full span of the recognized raw input range, with a correction factor for the shorter last step.
 
-The accuracy of raw input pressure range vs game-pressure was confirmed via testing upon using the [hardwaretester website](https://hardwaretester.com/gamepad) with several browsers.
+The accuracy of raw input pressure range vs game-pressure was confirmed via testing upon using the [HardwareTester website](https://hardwaretester.com/gamepad) on several browsers, and comparing with Cheat Engine pressure values.
 </details>
+
+
+
+### Clamping / Diagonal deviation
+
+Clamping of 90 values of smooth mode different
+
+    Upon using full stick pressure they indicate **boost energy and speed meter indicator** (for aerial dives and dropshoots). sideways ds for speedruns...
+    upon applying a **full stick pressure**, max boost energy colors also perfectly correlate to in-game **horizontal speed** ! (lower boost energy = more speed)
+
+
+
+Square mode (or standard mode) is the mode based on which most controllers rely on for stick inputs: the sticks move in the shape of a circle physically (restrained by the top cover of the controller), but the signal they transmit is in the shape of a square. This signal ranges between values of -1 to 1 for the vertical (Y) and horizontal (X) axis ; each measured independently.
+
+When pressing the stick fully up, down, right, or left, the resulting signal has a maximal magnitude of 1. For diagonals however the combined pressure of both axis can often translate into a maximal magnitude exceeding 1 ! (More or less, depending on the controller itself, the controller brand, and how worn out the sticks you are using are.)
+If you combine the maximal magnitude reached for every directions into a graphic, it should take the shape of a square with rounded corners ; which you can test for your controller on [this website](https://hardwaretester.com/gamepad) by clicking "Test circularity".
+
+![circularity test on my controller](https://i.imgur.com/C4HxBP7.png)
+
+This image above shows the circularity of my left and right sticks (xbox series controller): Notice how the top left and top right parts of my left stick have a stronger deviation due to the plastic of the stick being worn out from overuse.
+
+This mechanic of having stronger diagonal input possibilities is called the « Average error » (or circularity error/radial deviation): it is completely normal to have it to some degree (8 to 14% deviation is common for most controller brands[^1]). Having some deviation ensures the stick can reach a magnitude of 1 for every directions.
+
+[^1]: [Source](https://www.cowcotland.com/articles/4639-10/marre-des-manettes-pourries-comment-bien-choisir-sa-manette-partie-1-les-joysticks.html).
+
+### Journey's cross-shaped deadzone consequences
+When a game processes raw stick inputs, it often ensures inputs with a magnitude bigger than 1 are corrected by clamping their pressure value back over the circumference of a circle with a magnitude of 1. This helps preventing too strong inputs that would otherwise lead to faster diagonal movements or unusual camera speed.
+
+_Journey_ with its stick input processing logic however completely bypasses the ridiculously huge horizontal and vertical axis deadzones (thus starting at 29.690% pressure).
+This leads to the "magnitude = 1" representation no longer lying on the circumference of a circle, but instead on **a bigger square with rounded corners**, where the arching starts at the edges of the horizontal and vertical axis deadzones. This shape corresponds to the **gold dashed line** you can view on the following image, and **it represents a magnitude of 1 for every input directions based on _Journey_'s mapping** (or to put it simply: the expected range of motion to reach for _Journey_) ! It's on this line that _Journey_ clamps back too strong left stick inputs.
+
+![clamping explained](https://i.imgur.com/Dzn3XNZ.png)
+
+    left stick only sur graphic
+
+The problem with this bigger "magnitude = 1" shape is that even with some stick radial deviation, **most controller brands won't be able to reach it fully** in every directions ! (At least not without a custom re-calibration of pressure sensitivity, or worn out sticks.) This leads to the wayfarer most likely **not walking as fast if you hold the left stick in diagonals**, which can also translates into lower speed when Fancy Flying not completely on the vertical axis of the left stick...
+
+This can result in some controllers being more advantageous than others for _Journey_, if their stick radial deviation is bigger.
+
+### Clamping explained
+
+magic formula under spoilers
 
 
 
@@ -95,48 +136,11 @@ The **game-accurate** mode only snaps the right stick over the 90 recognized sti
 
 The **smooth** mode consists in a linear interpolation from the raw stick input after ignoring the vertical or horizontal axis deadzones. This mode may be visually more pleasing upon moving the left stick, but it shows less precision in regards to the true stick coordinates in-game.
 
-
-
-### Clamping
-Clamping of 90 values or smooth mode different
+clamped values ...
 
 
 
-## Speed limitations
-### Diagonal deviation
 
-Upon using full stick pressure they indicate **boost energy and speed meter indicator** (for aerial dives and dropshoots). sideways ds for speedruns...
-upon applying a **full stick pressure**, max boost energy colors also perfectly correlate to in-game **horizontal speed** ! (lower boost energy = more speed)
-
-Square mode (or standard mode) is the mode based on which most controllers rely on for sticks inputs: the sticks move in the shape of a circle physically, but the signal they transmit is in the shape of a square, with pressure ranging from between -1 to 1 for the vertical (Y) and horizontal (X) axis (each measured independently).
-
-The resulting signal received has a maximal magnitude of 1, if purely on the horizontal or vertical axis. For diagonals however the combined pressure of both axis physically contained inside of a circle often translates into a maximal magnitude reaching beyond 1 ! (More or less, depending on the controller itself, the controller brand, and how worn out the sticks you are using are.)
-The combined maximal magnitudes for every directions therefore take the shape of a square with rounded corners ; which you can test for your controller on [this website](https://hardwaretester.com/gamepad) by clicking "Test circularity".
-
-![circularity test on my controller](https://i.imgur.com/C4HxBP7.png)
-
-This image above shows the circularity of my left and right sticks (xbox series controller): Notice how the top left and top right parts of my left stick have a stronger deviation due to the plastic of the stick being worn out from overuse...
-
-This mechanic of having stronger diagonal input possibilities is called the « Average error » (or circularity error/radial deviation): it is completely normal to have it to some degree (8 to 14% deviation is typical for most controller brands).
-
-### Journey's cross-shaped deadzone consequences
-When a game processes raw stick inputs, it often ensures inputs with a magnitude bigger than 1 are corrected by clamping their pressure value back over the circumference of a circle with a magnitude of 1. This helps preventing too strong inputs that would otherwise lead to faster diagonal movements or unusual camera speed. Note having some degree of radial deviation is what ensures you can always reach this magnitude of 1 for every input directions !
-
-On PC, _Journey_ with its stick input processing logic however completely bypasses the ridiculously huge horizontal and vertical axis deadzones ; acting as if a game-processed pressure of 0% started at 29.689% raw stick input, for either axis.
-This leads to the "magnitude = 1" representation no longer lying on the circumference of a circle, but instead on **an extended square with rounded corners**, where the arching starts at the edges of the horizontal and vertical axis deadzones: This shape corresponds to the **gold dashed line** you can view on the following image, and **it corresponds to a magnitude of 1 for every input directions based on _Journey_'s mapping** (or to put it simply: the expected range of motion to reach for _Journey_) !
-
-![clamping explained](https://i.imgur.com/Dzn3XNZ.png)
-
-This gold dashed line shape is a problem for diagonal inputs because even with some stick radial deviation, most controller brands won't be able to reach it fully in every directions ! (At least not without a custom re-calibration of pressure sensitivity, or worn out sticks.) For the camera this could lead to a speed issue, however for some reason on PC **_Journey_ doesn't even apply clamping at all to the right stick's pressure positions with a magnitude exceeding 1 !** (but the left stick does apply it correctly.) This means playing with a right stick that has a really strong radial deviation involves it being possible to move the camera abnormally fast (yet nowhere near as fast as with a mouse of course).
-
-For most controllers it should remain possible to maintain 100% sideways pressure on the camera while also moving it a little up or down in-game (just peaking out of the vertical axis deadzone) ! If you were to succeed in giving a raw input of (X=1, Y=1), the right stick would give a camera speed corresponding to the maximal magnitude of 1.41 ! The camera would then be moving at 1.41 times its theoretical max speed. This can result in some controllers being more advantageous than others for _Journey_.
-
-I have a theory clamping was removed by the PC porting team solely for the right stick, to allow for quicker mouse movements...
-
-### PlayStation right stick clamping?
-It is highly probable the reason why PlayStation versions of _Journey_ have slow camera speed in diagonals is due to clamping working (almost) as intended. If you were to move the camera fully sideways and then making it move slightly up or down in-game you would instantly notice it slowing down in speed significantly however ! The reason I believe to be behind this is that _Journey_ doesn't apply clamping to the right stick the way it's supposed to: instead of clamping pressure values over the gold dotted line from the image above, it instead clamps these right stick values over the shape of a perfect circle (acting as if the right stick horizontal and vertical axis deadzones didn't exist, even though they do)! A circular clamping pattern can't account for the deadzones of _Journey_, which means it also clamps down pressure values with a magnitude inferior to 1! Hence why diagonal right stick inputs aren't convenient to use at all on PlayStation... Right stick camera control was added late during development of the game (it used to be purely Sixaxis at first), so it is hard to know whether this slower diagonal camera speed could be a mistake or intended.
-
-Keep in mind that for PlayStation, instead of using diagonal right stick inputs you can combine the use of the right stick (purely on the X or Y axis), with Sixaxis on the opposite axis at the same time (by moving the controller) ! This allows to reach speeds than can even exceed PC controller camera speed.
 
 
 
@@ -150,4 +154,4 @@ Keep in mind that for PlayStation, instead of using diagonal right stick inputs 
 ## Credits
 ChatGPT and ClaudeAI for helping to code everything.
 
-This [french article](https://www.cowcotland.com/articles/4639/marre-des-manettes-pourries-comment-bien-choisir-sa-manette-partie-1-les-joysticks.html) for explaining a lot about how stick input works, and how games handle them. It also helped making the clamping mechanic of the tool work perfectly as intended.
+This [french article](https://www.cowcotland.com/articles/4639/marre-des-manettes-pourries-comment-bien-choisir-sa-manette-partie-1-les-joysticks.html) for explaining a lot about how stick input works, and how games handle them. It also helped making the clamping mechanism of the tool work perfectly as intended.
