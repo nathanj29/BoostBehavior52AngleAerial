@@ -50,15 +50,15 @@ The two max boost energy graphics above (_Journey_-processed inputs) are designe
 <details>
 <summary>Click for explanations on how different these graphics could look under different circumstances :</summary>
 
-**Flatter camera angles** don't allow diving with such strong sideways left stick pressure, they permit weaker max boost values, and have different slow or flap pressure range thresholds (white curves).
+**Flatter camera angles** don't allow diving with such strong sideways left stick pressure, they permit weaker max boost values, and they have different slow or flap pressure range thresholds (white curves).
 
 If diving on the ground instead (**Dropshoot**):
 * Max boost energy colors would look very similar, if not the same. Because of it, upon using **full stick pressure** the colors act as both a **boost energy and speed meter indicator** (for aerial dives and dropshoots ! With the lower max boost energy color values giving more speed).
 * Slow and flap pressure range thresholds would be very slightly different in their shape.
 * Lighter flap pressure becomes impossible to apply without lifting off the ground, especially on sand as opposed to solid ground.
-* The jump animation transition (blue curve) would move up significantly, and instead of showing a "twirl vs flap" transition, "twirl" would be replaced by either twirling or running normally. "Flap" would be replaced by a [variety of unique jumping animations](https://youtu.be/-50GmclgT5c) which change based on how the wayfarer was moving prior to the initial dive (standing still, walking, or sliding)... Being under this blue curve is only possible on solid ground, which offers a more stable contact.
+* The jump animation transition (blue curve) would move up significantly, and instead of showing a "twirl vs flap" transition, "twirl" would be replaced by either twirling or running normally. "Flap" would be replaced by a [variety of unique jumping animations](https://youtu.be/-50GmclgT5c) that change based on how the wayfarer was moving prior to the initial dive (standing still, walking, or sliding)... Being under this blue curve is only possible on solid ground, which offers a more stable contact.
 
-Other situations for which these grahics would look very different include: **Holding the camera stick fully sideways**, being **frozen**, or being in **Paradise**.
+Other situations for which these graphics would look very different include **holding the camera stick fully sideways**, being **frozen**, or being in **Paradise**.
 </details>
 
 
@@ -89,7 +89,7 @@ In this formula, 29.690% corresponds to the first pressure input the game return
 
 (100% - 29.690% + 0.005%) is the full span of the recognized raw input range, with a correction factor for the shorter last step.
 
-The accuracy of raw input pressure range vs game-pressure was confirmed via testing upon using the [HardwareTester website](https://hardwaretester.com/gamepad) on several browsers, and comparing with Cheat Engine pressure values.
+The accuracy of the raw input pressure range vs game-pressure was confirmed via testing upon using the [HardwareTester website](https://hardwaretester.com/gamepad) on several browsers, and comparing with Cheat Engine pressure values.
 </details>
 
 
