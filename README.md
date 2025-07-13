@@ -73,7 +73,7 @@ _Journey_ recognizes only 90 fixed stick pressure values when outside the vertic
 <details>
 <summary>Click to view a chart listing every possible pressure values, raw and Journey-processed :</summary>
     
-![chart pressure comparison](https://i.imgur.com/8i5x20t.png)
+![chart pressure comparison](https://i.imgur.com/112dBZS.png)
 </details>
 
 <details>
