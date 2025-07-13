@@ -25,7 +25,7 @@ Visit [this link](https://nathanj29.github.io/BoostBehavior52AngleAerial/) to us
 
 
 
-## How to use the Fancy Flicker?
+## How to use the tool?
 Just open [this link](https://nathanj29.github.io/BoostBehavior52AngleAerial/) in any browser and move the left stick.
 
 Alternatively, add the tool to OBS:
