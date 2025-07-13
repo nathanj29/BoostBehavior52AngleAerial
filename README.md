@@ -10,7 +10,7 @@ Visit [this link](https://nathanj29.github.io/BoostBehavior52AngleAerial/) to us
 
 
 
-## Features of the tool
+## Features
 * Displays 2 graphics: raw left stick input vs _Journey_-processed input.
 * Shows the 3 left stick **deadzone types**, upon loading the tool.
 * Tracks the left stick inputs by using the browser API.
