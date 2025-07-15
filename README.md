@@ -58,7 +58,7 @@ If diving on the ground instead (**Dropshoot**):
 * Lighter flap pressure becomes impossible to apply without lifting off the ground, especially on sand as opposed to solid ground.
 * The jump animation transition (blue curve) would move up significantly, and instead of showing a "twirl vs flap" transition, "twirl" would be replaced by either twirling or running normally. "Flap" would be replaced by a [variety of unique jumping animations](https://youtu.be/-50GmclgT5c) that change based on how the wayfarer was moving prior to the initial dive (standing still, walking, or sliding)... Being under this blue curve is only possible on solid ground, which offers a more stable contact.
 
-Other situations for which these graphics would look very different include **holding the camera stick fully sideways**, being **frozen**, or being in **Paradise**.
+Other situations for which these graphics would look very different include **holding the camera stick fully sideways**, or being in **Paradise**.
 </details>
 
 
