@@ -43,7 +43,7 @@ Dimensions of the source: 2455 (width) x 1130 (height). Use ctrl+d or ctrl+f to 
 
 ## Why so specific? (52° angle, only in the air)
 
-![slow vs flap comparison](https://i.imgur.com/Bn1b68z.png)
+![slow vs flap comparison](https://raw.githubusercontent.com/nathanj29/BoostBehavior52AngleAerial/refs/heads/main/Images/slow%20and%20flap%20pressure%20and%20legend.png)
 
 The two max boost energy graphics above (_Journey_-processed inputs) are designed for when the **camera aims fully down (52° angle)**, and for **aerial dives** only. This specific setup was chosen as it is probably the most used beginner-friendly fancy flying setup, and it is quite easy to understand visually.
 
@@ -66,14 +66,14 @@ Other situations for which these graphics would look very different include **ho
 ## Stick pressure
 ### Recognized pressure points
 
-![slow vs flap comparison](https://i.imgur.com/gaPOpIN.png)
+![slow vs flap comparison](https://raw.githubusercontent.com/nathanj29/BoostBehavior52AngleAerial/refs/heads/main/Images/all%20deadzones%20left%20stick.png)
 
 _Journey_ recognizes only 90 fixed stick pressure values when outside the vertical or horizontal axis deadzones. These pressure points are scaled from the raw stick input every 0.781% (or 0.776% for the last step). The corresponding game-processed pressure values however are not equally spaced with each other: They follow an odd pattern with gaps of either 0.98% or 1.47% between steps (or even 0,00000186% for the first step).
 
 <details>
 <summary>Click to view a chart listing every possible pressure value, raw and Journey-processed :</summary>
     
-![chart pressure comparison](https://i.imgur.com/112dBZS.png)
+![chart pressure comparison](https://raw.githubusercontent.com/nathanj29/BoostBehavior52AngleAerial/refs/heads/main/Images/chart%20pressure.png)
 </details>
 
 <details>
@@ -83,7 +83,7 @@ Game-processed pressure points were simply written down one by one from observed
 
 Here is the formula that was used to find the raw stick input corresponding to each of these 90 steps:
     
-![math formula](https://i.imgur.com/8WMHyAW.png)
+![math formula](https://raw.githubusercontent.com/nathanj29/BoostBehavior52AngleAerial/refs/heads/main/Images/raw%20stick%20input%20formula.png)
 
 In this formula, 29.690% corresponds to the first pressure input the game returns as a value different than 0.
 
@@ -101,7 +101,7 @@ Square mode (or standard mode) is the mode based on which most controllers rely 
 When pressing the stick fully up, down, right, or left, the resulting signal has a maximal magnitude of 1. For diagonals however the combined pressure of both axis can often translate into a maximal magnitude exceeding 1 ! (More or less, depending on the controller itself, the controller brand, and how worn out the sticks you are using are.)
 If you combine the maximal magnitude reached for every direction into a graphic, it should take the shape of a square with rounded corners ; which you can test for your controller on [this website](https://hardwaretester.com/gamepad) by clicking "Test circularity".
 
-![circularity test on my controller](https://i.imgur.com/C4HxBP7.png)
+![circularity test on my controller](https://raw.githubusercontent.com/nathanj29/BoostBehavior52AngleAerial/refs/heads/main/Images/circularity%20error.png)
 
 This image above shows the circularity of my left and right sticks (xbox series controller): Notice how the top left and top right parts of my left stick have a stronger deviation due to the plastic of the stick being worn out from overuse.
 
@@ -115,7 +115,7 @@ When a game processes raw stick inputs, it often ensures inputs with a magnitude
 _Journey_ with its stick input processing logic however completely bypasses the ridiculously huge horizontal and vertical axis deadzones (thus starting at 29.690% raw pressure).
 This leads to the "magnitude = 1" representation no longer lying on the circumference of a circle, but instead on **a bigger square with rounded corners**, where the arching starts at the edges of the horizontal and vertical axis deadzones. This shape corresponds to the **gold dashed line** you can view on the following image, and **it represents a magnitude of 1 for every input direction based on _Journey_'s mapping** (or to put it simply: the expected range of motion to reach for _Journey_) ! It's over this line that _Journey_ will clamp back too strong left stick inputs.
 
-![clamping explained](https://i.imgur.com/VEAl9Ap.png)
+![clamping explained](https://raw.githubusercontent.com/nathanj29/BoostBehavior52AngleAerial/refs/heads/main/Images/left%20stick%20clamping%20explained.png)
 
 The problem with this bigger "magnitude = 1" shape is that even with some stick radial deviation, **most controller brands won't be able to reach it fully** in every direction ! (At least not without a custom re-calibration of pressure sensitivity, or worn out sticks.) This leads to the wayfarer most likely **not walking as fast if you hold the left stick in diagonals**, which can also translate into lower speed when Fancy Flying not completely on the vertical axis of the left stick...
 
