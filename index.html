@@ -44,7 +44,7 @@
 			left: 0;
 			width: 100%;
 			height: 100%;
-			background-image: url('https://i.imgur.com/syECPgZ.png');
+			background-image: url('https://raw.githubusercontent.com/nathanj29/BoostBehavior52AngleAerial/refs/heads/main/Images/legend.png');
 			background-size: cover;
 			background-position: center;
 			opacity: 0;
@@ -112,19 +112,19 @@
         }
         
         .background1 {
-            background-image: url('https://i.imgur.com/ai3Icf9.png');
+            background-image: url('https://raw.githubusercontent.com/nathanj29/BoostBehavior52AngleAerial/refs/heads/main/Images/flap%20pressure%20left%20graphic.png');
             opacity: 1;
             z-index: 1;
         }
         
         .background2 {
-            background-image: url('https://i.imgur.com/G9GxMgf.png');
+            background-image: url('https://raw.githubusercontent.com/nathanj29/BoostBehavior52AngleAerial/refs/heads/main/Images/slow%20pressure%20left%20graphic.png');
             opacity: 0;
             z-index: 2; /* Higher z-index so slow pressure bg appears on top when fading in or out*/
         }
         
         .diveStartBackground {
-            background-image: url('https://i.imgur.com/UzL77LC.png');
+            background-image: url('https://raw.githubusercontent.com/nathanj29/BoostBehavior52AngleAerial/refs/heads/main/Images/deadzone%20true%20pressure.png');
             opacity: 1;
             z-index: 3;
             position: absolute;
@@ -139,15 +139,15 @@
         
         /* Right side different background images */
         #rightContainer .background1 {
-            background-image: url('https://i.imgur.com/eLOPCp2.png');
+            background-image: url('https://raw.githubusercontent.com/nathanj29/BoostBehavior52AngleAerial/refs/heads/main/Images/flap%20pressure.png');
         }
         
         #rightContainer .background2 {
-            background-image: url('https://i.imgur.com/QWeM2G7.png');
+            background-image: url('https://raw.githubusercontent.com/nathanj29/BoostBehavior52AngleAerial/refs/heads/main/Images/slow%20pressure.png');
         }
         
         #rightContainer .diveStartBackground {
-            background-image: url('https://i.imgur.com/TDaTE2X.png');
+            background-image: url('https://raw.githubusercontent.com/nathanj29/BoostBehavior52AngleAerial/refs/heads/main/Images/deadzone%20in-game.png');
         }
 		
         .circle { /* The stick */
@@ -410,14 +410,14 @@
 				rightMaskCtx1.drawImage(rightMask1, 0, 0, 1032, 1032);
 				rightMasksLoaded = true;
 			};
-			rightMask1.src = 'https://i.imgur.com/C0sMtLX.png';
+			rightMask1.src = 'https://raw.githubusercontent.com/nathanj29/BoostBehavior52AngleAerial/refs/heads/main/Images/flap%20to%20slow%20mask.png';
 			
 			const rightMask2 = new Image();
 			rightMask2.crossOrigin = 'anonymous';
 			rightMask2.onload = function() {
 				rightMaskCtx2.drawImage(rightMask2, 0, 0, 1032, 1032);
 			};
-			rightMask2.src = 'https://i.imgur.com/0dhlHXb.png';
+			rightMask2.src = 'https://raw.githubusercontent.com/nathanj29/BoostBehavior52AngleAerial/refs/heads/main/Images/slow%20to%20flap%20mask.png';
 		}
         
         // Check if stick position hits black area in mask
@@ -770,3 +770,4 @@
     </script>
 </body>
 </html>
+
